@@ -23,10 +23,37 @@ typedef std::vector<std::vector<char>> OthelloBoardState;
 
 bool IsValidMove(char player, int x, int y, const OthelloBoardState& grid)
 {
-	// It is assumed that 'grid' will have exactily 8x8 rows/cols
-	// TODO: calculate if a given coordinate is a valid move.
-	//  the given coordinate must adhere to the rules of othello for 
-	//  determining if the move is valid
+	auto CheckDir = [&](int xd, int yd) {
+
+		char oponent = player == 'B' ? 'W' : 'B';
+		int xi = x + xd;
+		int yi = y + yd;
+		int inc = 0;
+		while (xi >= 0 && xi < 8 && yi >= 0 && yi < 8)
+		{
+			if (grid[yi][xi] != oponent)
+				break;
+
+			xi += xd;
+			yi += yd;
+			inc++;
+		}
+
+		if (xi >= 0 && xi < 8 && yi >= 0 && yi < 8 && grid[yi][xi] == player && inc >= 1)
+			return true;
+
+		return false;
+	};
+
+	if (CheckDir(-1, 0)) return true;
+	if (CheckDir(1, 0)) return true;
+	if (CheckDir(0, -1)) return true;
+	if (CheckDir(0, 1)) return true;
+
+	if (CheckDir(-1,-1)) return true;
+	if (CheckDir( 1, -1)) return true;
+	if (CheckDir( 1,  1)) return true;
+	if (CheckDir(-1,  1)) return true;
 
 	return false;
 }
